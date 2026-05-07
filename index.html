@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yavuz IT – ezRechnung</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0d0d0d;
+    --ink2: #2a2a2a;
+    --muted: #666;
+    --gold: #f5c400;
+    --gold2: #ffd740;
+    --gold-dark: #c49a00;
+    --surface: #f9f7f0;
+    --card: #fff;
+    --border: rgba(0,0,0,0.1);
+    --border-gold: rgba(245,196,0,0.3);
+    --radius: 14px;
+  }
+  body { font-family: 'Space Grotesk', sans-serif; color: var(--ink); background: #fff; line-height: 1.6; }
+  a { text-decoration: none; color: inherit; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.9rem 2.5rem; border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo img { height: 52px; width: auto; display: block; }
+  .nav-links { display: flex; gap: 2rem; font-size: 0.9rem; color: var(--ink2); }
+  .nav-links a:hover { color: var(--gold-dark); }
+  .nav-cta {
+    background: var(--gold); color: var(--ink); padding: 0.55rem 1.3rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 700; transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold2); }
+
+  /* HERO */
+  .hero {
+    padding: 5rem 2.5rem 4rem;
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 60%, #111 100%);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,196,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(245,196,0,0.1); color: var(--gold); border: 1px solid rgba(245,196,0,0.3);
+    padding: 0.3rem 0.9rem; border-radius: 99px; font-size: 0.8rem; font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 1.2rem; color: #fff; }
+  h1 em { font-style: normal; color: var(--gold); }
+  .hero p { font-size: 1.1rem; color: rgba(255,255,255,0.65); max-width: 540px; margin: 0 auto 2.2rem; line-height: 1.7; }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--ink); padding: 0.85rem 2rem;
+    border-radius: 10px; font-weight: 700; font-size: 0.95rem; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent; color: #fff; padding: 0.85rem 2rem;
+    border-radius: 10px; font-weight: 500; font-size: 0.95rem;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* TRUST BAR */
+  .trust { background: var(--gold); color: var(--ink); padding: 0.9rem 2.5rem; text-align: center; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; font-weight: 600; }
+  .trust-item { display: flex; align-items: center; gap: 6px; }
+
+  /* SECTIONS */
+  section { padding: 4.5rem 2.5rem; max-width: 900px; margin: 0 auto; }
+  .section-label { font-size: 0.75rem; font-weight: 700; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.6rem; }
+  h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -0.8px; margin-bottom: 0.8rem; }
+  h2 + p { color: var(--muted); font-size: 1rem; max-width: 540px; }
+
+  /* FEATURES */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 2.5rem; }
+  .feature-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.5rem; transition: border-color 0.2s, transform 0.2s;
+  }
+  .feature-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .feature-icon { width: 40px; height: 40px; background: rgba(245,196,0,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 1rem; }
+  .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+  /* PRODUCT */
+  .product-showcase {
+    background: var(--ink); border-radius: 20px;
+    padding: 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+    align-items: center; margin-top: 2.5rem;
+  }
+  @media (max-width: 600px) { .product-showcase { grid-template-columns: 1fr; } }
+  .screen-mockup { background: #1a1a1a; border-radius: 12px; padding: 1.2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(245,196,0,0.1); }
+  .screen-bar { display: flex; gap: 5px; margin-bottom: 1rem; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+  .screen-content { background: #111; border-radius: 8px; padding: 1rem; }
+  .screen-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem; }
+  .screen-row:last-child { border-bottom: none; }
+  .screen-label { color: rgba(255,255,255,0.4); }
+  .screen-val { color: var(--gold); font-weight: 500; font-family: monospace; }
+  .screen-total { background: rgba(245,196,0,0.12); border: 1px solid rgba(245,196,0,0.2); border-radius: 6px; padding: 0.6rem; margin-top: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
+  .screen-total .label { color: rgba(255,255,255,0.6); font-size: 0.78rem; }
+  .screen-total .amount { color: var(--gold); font-weight: 700; font-size: 1rem; font-family: monospace; }
+  .product-info h3 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem; color: #fff; }
+  .product-info p { color: rgba(255,255,255,0.6); font-size: 0.93rem; margin-bottom: 1.5rem; line-height: 1.7; }
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .check-list li { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: rgba(255,255,255,0.75); }
+  .check-list li::before { content: '\2713'; color: var(--gold); font-weight: 700; font-size: 0.85rem; min-width: 16px; }
+
+  /* PRICING */
+  .pricing-card {
+    background: var(--ink); border: 1.5px solid rgba(245,196,0,0.3); border-radius: 20px;
+    padding: 2.5rem; max-width: 420px; margin: 2.5rem auto 0; text-align: center;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.15);
+  }
+  .pricing-badge { background: rgba(245,196,0,0.15); color: var(--gold); border: 1px solid rgba(245,196,0,0.3); display: inline-block; padding: 0.25rem 0.8rem; border-radius: 99px; font-size: 0.78rem; font-weight: 600; margin-bottom: 1rem; }
+  .price { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: var(--gold); line-height: 1; }
+  .price sub { font-size: 1.2rem; vertical-align: super; font-weight: 500; }
+  .price-period { color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-top: 0.3rem; margin-bottom: 1.5rem; }
+  .pricing-features { list-style: none; text-align: left; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; }
+  .pricing-features li { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: rgba(255,255,255,0.75); }
+  .pricing-features li::before { content: '\2713'; color: var(--gold); font-weight: 700; min-width: 16px; }
+  .btn-full { display: block; width: 100%; background: var(--gold); color: var(--ink); padding: 0.9rem; border-radius: 10px; font-weight: 700; font-size: 0.95rem; text-align: center; transition: background 0.2s; }
+  .btn-full:hover { background: var(--gold2); }
+
+  /* ABOUT */
+  .about-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 2.5rem; display: flex; align-items: flex-start; gap: 2rem; margin-top: 2.5rem;
+  }
+  @media (max-width: 600px) { .about-card { flex-direction: column; } }
+  .avatar { width: 72px; height: 72px; min-width: 72px; border-radius: 50%; background: var(--ink); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--gold); font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; }
+  .about-text h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.3rem; }
+  .about-role { color: var(--gold-dark); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.8rem; }
+  .about-text p { color: var(--muted); font-size: 0.93rem; line-height: 1.7; }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; }
+  @media (max-width: 500px) { .contact-grid { grid-template-columns: 1fr; } .hero-btns { flex-direction: column; align-items: center; } .nav-links { display: none; } }
+  .contact-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 12px; }
+  .contact-icon { width: 36px; height: 36px; background: rgba(245,196,0,0.12); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .contact-item strong { display: block; font-size: 0.8rem; color: var(--muted); font-weight: 500; margin-bottom: 2px; }
+  .contact-item span { font-size: 0.92rem; color: var(--ink); }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: rgba(255,255,255,0.4); padding: 2rem 2.5rem; text-align: center; font-size: 0.82rem; line-height: 2; }
+  footer strong { color: rgba(255,255,255,0.8); }
+  .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
+  .footer-links a { color: rgba(255,255,255,0.4); transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-divider { width: 40px; height: 2px; background: var(--gold); margin: 0 auto 1.2rem; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAssAAADYCAYAAAAd1a7HAAAdRUlEQVR4nO3d0XXbxrq38Udn7Xvjq8DMne/MVBCmgmhXEKaCMBWYriB0BZuuYNMVHLqCTd35LlIFm6pA52LEj5QiWCTwDjEAn99aXIltcTAiQfA/gxeDq4eHByRJkiT93f903QFJkiSpVIZlSZIkqYZhWZIkSaphWJYkSZJqGJYlSZKkGoZlSZIkqYZhWZIkSaphWJYkSZJqGJYlSZKkGoZlSZIkqYZhWZIkSaphWJYkSZJqGJYlSZKkGoZlSZIkqYZhWZIkSaphWJYkSZJqGJYlSZKkGoZlSZIkqYZhWZIkSarxj647IPXOt6uX/rYCxjXP2ADbLH2RJB3v3UPXPVAPGZalZirg+vExAd688vP3wBpYPT62WXolSZJCXT08dDDKenlmTuqDCTAFfm3ZzhdgQQrQkqRzcGZZDZwvLH+7qtifpt6STk1rGCYH/7/uqA+5jYAl8FNwu1+BGcP8PFQ8LU1Zd9IL1RmT3iPoplSowv1jyEaPD+jmO7+ivjRO/bHlcN/paLCTPyx/u5qSwsD7Z/9yT5pZW+Ap6T6akN7XX174t6HNms6BD5m38fFxO0Mw5eXPPAxv3+ibEWk/u+bvpUM3pPdmmbkPU76/f8wZ5uDxElSk93YKvH32b/ekfWtO3u/8KfX7l/rrhvS9seTdw+bcG88XltNM8orXZ+LuSDv2Kk9HFKwiHex+P+JnP5He276qSB/Ocx10b0iDkO2Zthet4rjPPAxrcNAXU1IYfq2+Ptd+WOH+MWRj0vv7PCQ/d08arK2Dt19x/P6lfvsKzHn3sD7XBvOE5RSU15wWMj6TDuYqV8XlvK9jjjvwR+trYK44fd/4gxTelN8U+NcJPx+9H1acvn/0fbB9Scak9/e1gdihn4kLzBXnndhQGb4AU949bHNvKNc6y3NO32l/JYWTKrgvijGm2cHoV9IsQp+MSb/ruYMypNd3Tf8+B3NO3zf+5Gm9u/IYc/qg5D2x5RhzTt8/fsf9oy+WnBaUIfb7fo5B+RL9Amz4djXOvaH4meVvVyPgrxYt9HVmbcjGnD5rcOiO/YUepatI9ZJdBOVDX+lPUBjR/DN///j8bVBf9FRFuxm3H2lfPzyi+f5xgxdplW7KaWctDkWU24xolznUf/fAJGctc46Z5WnL578HbvEAWYop8B+aB2VIwXMc0ZkzWNF9UIZUdzfvuhNHmrZ47hu8XiGnBe1m3KYBfWjTxnv6c+y4VNOOnhvZhvrtDbB+nKzNIkdYngS0kX7x/p2+H5o5zWcMnrsOaienGWVdHPKBfswuT1o+v08Dgz6Z0n498HH7brTePyL6oHzaHDPf0r4UY9Ly+RqGrBMvuWqWI7wB/o0XeHRlSf7l0koyJtXQlmZF/+qXm+jLwKAvxgzn4slR1x1QVuOuO6DBeM+3q3mOhksOyzt/kn/dT+1VpBrFtjNSfVJRbinAJZUprLiMgUFuFc0uuJKkvps9rsgWKkdYvs3Q5q+kAFdlaFt7Y9LrnOOq4tsMbUZZUkadcp3SyxRug9q5pIFBTgtcGUCXY9t1B1SUN2SoSMgRltcZ2oR08N/gKZtcpuRdLm2Vqd22Zrx8F8LSlFymsA5sq/SBQemmxJ4VWge2JeWw7roDKs40usH4sPzuYUlaKiyHt3jhXw5z0oV8uU7bfqbM0f+YMuuU66wo8+zKkrTEV5SSBwYlGxNfp7wMbk+KtiQtHSbtvI1eezlXzfI0U7uwv/BvnnEbl6IiBbCcF/LdU+ZFmhXlznbXKblMYRbc3ooyBwalqkivWeSA9w/KLp+SIE3EzDvug8ozjmwsT1hO9+v+LUvbex/o553OSjEmvX45SxDSQuFlziovyVNy8pW00P7Hx/+PVmqZwpp0e+IoJQ8MSrQkdn/+zHBW09DwLUj7rLQzimws32oYqRwjd2D+CeuYm7im3V29jrELypuM22hqRvwg4R74mfQ7zx8fk8e/iz5FWGqZwozYcoxSBwalmRG7P99R5tkg6XumpEkKCXoxs7yzD8w564neku4wN8u4jSFZkMpYci4rdUe5QXlMfJ3ybmCwfuHf1o/bjAyRUG6ZwjWxn/dSBwalGBO/P19T5tkg6TVz4AfSWa7oY676pYpsLP86yykwT8hfgP8n5QaIEoxI4fX3zNu5Yb8EXWkq4i9YOmYG/fbxZyIP3qWWKdwSf83CCj/XL6mI3wf+oMzPrnSsW9Lk2Ri48lHE40fgn/S4VOY8NyV597Ahz+zac79gWcZLrsm3fvKhL5Rbowzx688eE5R3to8/exe4/VLLFFZYv3wOS2LrlL9gnbKkeBvSMXzK+QLzbWRj57uD37uHW1JY+Jp5S7uyjHnm7fRBRfpCzV12AekDcE25QXlK/F0JZ5w2C7clT5nCOLC9KDOsX85pRnyd8jSwPUk6NCLlkXPdHfg2srHz3u763cOWdw8TzjOy+MBlzzJPON9tq3+j7C/aMfEzZp9pVtKxIT70rSizTGGK9cs5jLFOWVLZRqTvgCXpe+8vzheUoddheW9Kqo3L7T2XN8tckYLh/5L/Fs73pDqkZebttFGR+hc5s35DuwtKF6RT3lHeUuZ7sMH1l6NVWKcsqTxj0vF+RQqqf5FudvYr+UtAX7KObKyrsAwpMPyT89x5ZzfLPDnDtrp0zXku4oP9iherM2yrjQXxdcpT2s/CTYmtX/6FMleEWRJ7JunS65eXWKcsqXsT0kTkmvR9+B/SGa9fyD9R95qbx9LfMF2GZUhfehPOs8TLe9Js65LgxaoLMCLtsP/mPDvpDeWueHFoSvd1ynW2xN+2/U/KLDuaYf1yhBmxdcq7gZ8kfU9F+r5akL7/Hkh56gPpeJz7mqhTLaIb7Dosw37GN/eFfzu/sq8brc60zVwq0k7xF2mHPYfPpEC2PdP2mhpTTp1ynQ3x5Ugrytuvt1i/3NYY65QlnceIfb3xLfBf0mTc73RTUnGKu8cli0OVEJZhv6xW5HJT3/OG9GV7Sz9Dc0Xq9y3nKbnYKf1CvkNLyqpTrrPA+uWmVvTvs9tERXzpyUeCa/ok9daYfb3xlqf1xl2XVJxqlqPRUsLyzoz8d/w7dBial5R5CvvQiP1I7wPnO/VxT7pt8/JM22trQZl1ynWmWL/cxKXULy+J/cL6ymWWsUhKJuzrjR94Wm9cWknFKb7w7mGVo+HSwjKkL4YJseHhNW9II6j/sJ8BG51x+99TkcLUmv3SK+fcmW/Y10T3wTXxs+0z8tZnb7F+uamh1y/PiK9Tvg5sT1LZKr5fbzwUN2Q883318PCQq+16366O+amKFJwjvyhOdUMKiWvSTnZ7pu1ODh5d7syfKHOGss6I9D5FDiY+c77Skxmxdal3lFlfPiZ9piLfp5/pz4DuWGPSAD5SF6/TmnbHsY8Me0DUd21DxBA/u10a8TRD9K2MookbYMK7h22uDfwjV8MBtqTR0Iz4C1uO9f7xcThTeUPq2y1Pw/P6hHZHPJ25nhz8fQk79j3pdV92242TrehHnXKdBWlfiBog7uqXr4Pai7Ihva7/CmxzRfr8bAPb7FKFdcqSXjfmaTjucxlFE9mDMpQdlncW7O8rXsJOsKuFfT5T8uHcHclkdypj0203TragX3XKdaak1z5q0LSrX14EtRdlSTqwRy3tt6tfngS117Ul1ilL+rsJZZx5LsFH3j3Mz7GhEmuWX7ImzRpFrhqgv/tEP9ZPfu6a/tUp19li/XJTP9GvsqE6M1xPWdLl1Buf4p5UHvnDuYIy9GNmeWfLvixjThmzzEOxu+hn3W03GhkRXy4SvZ7yqTak9Zcjy49WlFe/vGV/8WrU5/lP9tcY9NGE+LKzKee73kJScyMur974GDfsKwzWuUsuXtKnsLyzIH0ZLil/cew++EI35QZRVvS7TrnOAuuXm1pR3sDgGBXxdcqfMrQpKcaYy643rvOV9N2wZn877eRdB4tS0M+wDOlFHJNmmIdSK3xuu1Ozq2670cqcYdQp15li/XITpQ4MXrNimAM/SckE641f8pV9MF532ZE6fQ3LO3PSF8wSZ5lP0ffZZEgHm+iB0pSyTt9vSYEvcvmwUssUZqQBcNTnuNSBQZ05sV+erqcsdaviaTg2oyT3PA3Gm+66cry+h2V4Oss8w9MY33PHvka0zyou53T1BuuXmyp1YPDchDwDv9vgNiXVG2G98UvueBqMN911pbkhhOWdOWmGeYmnN567J82wzbvtRpgVl3W6eoH1y02tKG9gcKjicgZ+0pCMsd74JV3dzC2rIYVlSG/K5PGxxJEdpJUd5gxkh+VyT1dPsX65iVIHBjsrLmvgp2Gpuu7AmVQ8DcdOyO3t6o03PL8Yb0CGFpZ31qRTIjMud5m5L6Tf/7bbboSacLmnq7dYv9xUqQODOZc58NNwjAPa2Aa0EW3E03BsvXGyqzfeUPDFeDlcPTx0sAzHt6tzbq0ifVHOuIzQvFsjeN1tN8JVpFAb+R5+on+zcDNi65fvKLNMYUxs/TLAj5QzMJiQbi4Q6TfKvEX9mnaDgq8M586MQzOh/X581kBQY8zTcOxZ6eSOp8F4011XHnW0dNwlhOWdihQ0pgzzgzC0covn1sTOwt1Q5l3tjrEi9g5vXyhzRnJKbP1yKQODiviB32fKvUvfnHZnhPr8WR26Ge0H710EgglPw/ElTKQdY3fzj/Xj47a7rtRwneXstqSD9pz0pTKj/6dW7kinlpd0HwBymuPp6kNTrF9uopT65RXWKZ+i78fpIRu1fH7k7e6/Z0z63E+w3vjQ4cV4a4adI1q5pJnll4xJweOa/sw235O+bBeUcEokvwnxp6v/Sf9XCxgTW78MZZUp7FSkg3hkYPqD7gYGc2Lr7u9Jn5FNYJvRJrT/DJe4b6r8Eptr4m9e1WfF3/zjVZZhdG5MCs4Tyvtg7UZ/K/q6gzdTETuDCv2sU64zw/rlproIXxMup0750Aj4q2UbXQ5wVK9tgPhIniVNK9LnIrJcrW8Ob/6xYSjZwbBclIqnNU1jzlvTdHhf9A0l1g2dx4rYg13O2scRaV8ZHWxjQwqeK/K9hyusX27i3AODisuqU35uS7vfvdT98pJdA/9u2UaOs3wV8Wej+mAQN/94lWG5eBXpy3X0+Nj9eefYU1F37IPTln2g2jz+/e3zJ1yoGbGzpvek9+s2sE0e21zw+vv/lTSDsg7efkX87Hups5Ur+jswWBN/geqE8s4C1FnR/r37f/Tn970ES9pfT/ADscfkissJyrszzhtKvRgvB8Oy9P+Nia/HzTGDMeP0QJ/jtOOY2Ner1DrYiviBwTlO78+JXx+8bzW8M9oPfnOdstfpKuC/Ldu4o/0Fgs+tGG7pxUXc/ONVhmUJ6E+d8pLmsyo5Tp/PiJ2JL3Xmcky/LmycEF+n3Mf63THt37d7UrjatmxH7S2A31u2EX0cvKZ9WUgp7nm6hNu6u64UxrAsAf2oU55R5izZitjXrtSa2Bn9uLCxIr5Ouc+1u7e0HwQ7u9y9MTED1uizfbf0Z1Wr5w4vxlvTr7NG52VYlnpRpzwiHcgiAlCOer0N1i83kSOEromtUy51tZJjLWg/Gwn9K0EZmg3ta4LvScerKFNiLwDO7fBivDWXUm8coaOw/D+dbFX6uzGxQRnSAfQ2uM05cTOF86B2drbEB74FZd49bUr6womyuzFLlAXxNz+4pr9BGeIGXWtig5aOtyTm4rlVQBuHpsHtRbshlQP+k3Sh6ojU5yUG5V5wZlklqOhHnTK0XwLruRxX+M+wfrmpiFnLa+JrJ/tYp/ySW2I+56Xuk0O2JO5umj8TV4db0f5iw2iHN//Y4H4ax5llXbAFsUH5K3mC8oT49bbHwe1Bej2/BLb3njKD2oYUIiOtaDdrOSK+bOULZb7+TSyC2nlPev/HQe2pXkVsUN6VIES5DmyriXvSZ/QP0iDgivRdMeeSV60YGMOyujYl7iAM6cB1HdjeoVGGNicZ2oT4MoVfKfNU54LYgcFb2oXdFbEDqjvKfN2bWpI+oxHeksLILKg9/d2Y9BpHHqPngW1BnuPy99yRLn7+g3QmqiJ95yxw1YrBMizHGrEfTW5ItwLdPP55jrMgz42JnzG7Jt9IfpSp3Ry2WL/cVNP65QXxN0OYMqyZqS2xn/k3pJKjNfkGnpdoRBrY/IfYffqO+DMvk+D26nwiheMR6XO5wAtNL4ZhOcaIdLD+i3TzgZ/YH2DeP/75A+nAs6bMwHFuFemgGTkL9xFH9oc2xJYpvCG9Z1VgmxG2xA8M/uS0Gd0pMSs9HBrq/rwgbnZ55yfSetYb0kBnHNz+JahI+/GK9F0WOZu8M8/Q5jnsroHZdNsNdcUL/Nq75vTQd0/64C3De9MfS2IPxl/JP8MwIf4GE+dYmm2F6y83dcz7MyV+2apz7M9dmhN/V8OXfH387/oM2+qjMSkkj8i/RnGOO/ZB/BKN37Pbn25xFYtS3AIr3j1sc27EsNzONe2uei91DdvcpsSGi3Pd2WtEmnGJdI41Yytcf7mN7/2uU+KD8iXcqa4ifp9U2SJXwDi05nxhWeX6DMxyhWbLMJob0T4s/IvLO104pl91yoduia2NveM8p/W2WL/cxr9Iv2918HcVaXY0x40Qrhl2UIb0+8067oPO5wvO7iuvX4EN367GORo3LDe3JKbedhHQRl9U9L9OeR7Y1jKwrddsyFO/XJoteVZD+Z20luv68fFf8pQRDLVO+SUrYlcyUZlyr+iyydi2+iWtkPPtqopu2LDczJi40z4/MezaxENzYq+s/sr5LxhZkm6I0NYd5x8oLYhff3ke2F6UDfHrL+/8RL5Tvl3sz12bEn8mQGWZkvdMySZj2+qfLBM5huVmpoW3V6IRsasF5FxP+TVT2l/Nf003p9qnxIaTGWUuqbegX7OWXe7PXdqSfu/o1TFUhj/If6Ykd/vqn1/4djWKbNCw3My48PZKNA1u75ru6jo3pLMBTb7g70kXjG3iunOSLbGh7A3l1p5O6c+s5TXDr1Ous6HcfUjNfeY8Z89u2a9SIe1MIxszLDczDm4v+kYGJZoEtlVCXeeG9DudUpJx8/icZXhvTrMhtkxhHNhWpC39mK39RPf7c9eWpEGkhuHcy0suz7gt9cM4sjHDcjORF6jpNCXVdW5IH8jf+P4p/5vHnxlTTn3dgn6VKTS1IV/9coQbnFXdWZIGwuq3LtZhXxJzLYmGo4pszHWWm9kSH5h7/6K8Yk37C6P6sP7s5Nmf1x304VgVMWvd9uEGGivi119u6540gLrtthvFmZJnST7l1+UNiybE3zRK/fWFdw/XUY05s9zMJri9vtRVtrENaOM6qJ2c1s8eJdvSjzKFCFPK+5xNMSi/ZEk6E+NFf/3ykW4vVl/jmQntbSIbMyw3swlubx3cXolWLZ9fQp3yEG1oX6awat+N7LaUNTD4RD9et64sOf2aAHXjnnR3vnnH/YDUh89dd0JFWEU2ZlhuZhXc3jq4vRKtaD5TVFKd8hAtaF6/fE9/Lq7ZUMZFZOm2rHrNhhSYP3XbDX3HF1Jp3LrbbjwxxcB86b7y7mET2aBhuZk1cUvV3NGfsNHGlmYB4VLXnz23Kc3KFBaUXxpzaEm34csL+k6zJb1eP+PyYCW5I70n15T5+Z9S9oW9yueeDMdYw3Jzs6B2pkHt9MGS00b896SZpW2GvuipLaffHOIz/Zzxn9FNbeNn0gV92w623Xdr0rHgNwzNXdqt7DOirNnklyyAH3F/uSQpMwTPKoNhuY0N7U/pXmId7pQ04n8tlO3WJN7k7Y4ObEiv+TEzzF1fzNPWnPNeRPYH/X69SrEk7aM/kM4QWNOc3w3ptf6RNNhbdtmZE21I+8vPXMZSmZcsrcqUISiDS8dFmNJsmaOP9HNWLsqI9NpN2C8pd0c6uK3o1wF5iKakmeYx+6XlvpLenwXDWcVhRNrX2i5rWOeG9FpuMrWvtATimP3yhZOan9PrtqR9dfff3f8PRUXaP8akz/6os54owpZdZsgUkncMyzEmpC/cY9arvSN9ea6z9UbSqaakwWvbNad37h7bWwa1JynCuw4yj3rPsBzr+vEx4emXrjOmUj9MSZ/hpjcwuSHNvC9DeiMplmFZDXQTlqU+G+5gT3sV+zKU3eOlu3Z+JZWkrB8ft5n7JakNw7IaMCxLpzIsS1I/GZbVgKthSJIkSTUMy5IkSVINw7IkSZJUw7AsSZIk1TAsS5IkSTUMy5IkSVINw7IkSZJUw7AsSZIk1TAsS5IkSTUMy5IkSVINw7IkSZJUw7AsSZIk1TAsS5IkSTUMy5IkSVINw7IkSZJUw7AsSZIk1TAsS5IkSTUMy5IkSVINw7IkSZJUw7AsSZIk1TAsS5IkSTUMy5IkSVKNf3TdAUm9VgHjgz+vC+iDhmELbDrugyQZliU1MgVmwPsX/u0LMCd/0PleHzQM98CStD9tu+yIpMt19fDw0HUfpH75dtV1D7pUASvgpyN+9iMp5HTZBw3DPXBNN2cuNCTvzDw6nTXLko5VkcLKsSH1A7DouA8ahjfA/wKTjvsh6QIZliUda87pJQ+/ExtwmvRBw7EiDZgk6WwMy5KOMSIF3yYWBfRBw/CGVKcuSWdjWJZ0jGmL574nZrWKNn3QcEy77oCky2JYlnSMScvnjwvog4bhLZZiSDojw7Kkcxh13QENyrjrDki6HIZlSZIkqYZhWVJfbLvugIqx7roDki6HYVlSX6y77oCKcNN1ByRdFsOypL5Yku7kpsu26LoDki6LYVlSX2zJc/ts9ccNadAkSWdjWJbUJwvgc9edUCducPlASR0wLEvqmynwsetO6Ky+kILytttuSLpEhmVJfTQHfgA+4QVfQ3VPOovwM3CNQVlSR/7RdQckqaFbYNZxH85hDnzI1PYdsAI2pNdznWk7ktRbhmVJKldFngHBZ1L99yZD25I0KIZlSSrXDHgT2N4NqeZ7E9imJA2aNcuSVKaK2Fnlz8AYg7IkncSwLElluiZuVvk30oyyJOlEhmVJKtMsqJ0/8EYektSYYVmSyjMC3ge08wVvDy1JrRiWJak81wFt3GPphSS1ZliWpPJMA9qY4408JKk1w7IklaWifQnGPZZfSFIIw7IklWUS0MYioA1JEoZlSSrNOKCNZUAbkiQMy5JUmknL598Bt+27IUkCw7IklWbU8vnrgD5Ikh4ZliWpLG9bPn8T0QlJUmJYlqRyjAPa2AS0IUl6ZFiWpHJUAW1sAtqQJD0yLEvSsGy77oAkDYlhWZLKMWn5/PuITkiS9gzLkjQcm647IElDY1iWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJakc2647IEl6yrAs6Ri3LZ+/DujDJdi0fP5tQB8kSQcMy5KOsWrx3HsMy8dak16vNs+XJAUyLEs6xgq4a/jcRVw3LsKi4fPugGVcNyRJYFiWdLzrBs+5wbB8qgXpdTvVNLYbkiQwLEs63gb47YSfvyEF7G2GvgzZFphwWmD+DUswJCkLw7KkUyyBH3k9yH0mBb7bvN0ZrC3p9fv8ys/dAT9j+YUkZXP18PDQdR+kfvl21XUPSjE5eEAKeGtSffPt2XszXCPSDP348f8hvc4b2l14KV2ed2Yenc6wLEmSJNWwDEOSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSahiWJUmSpBqGZUmSJKmGYVmSJEmqYViWJEmSavwfs/l2I4QT+vgAAAAASUVORK5CYII=" alt="Yavuz IT"></a>
+  <div class="nav-links">
+    <a href="#produkt">Produkt</a>
+    <a href="#preise">Preise</a>
+    <a href="#ueber">&#220;ber mich</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+  <a href="https://www.ebay.de/itm/327131500089" target="_blank" class="nav-cta">Jetzt kaufen</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Neu: XRechnung &amp; ZUGFeRD 2.0 konform</div>
+  <h1>Elektronische Rechnungen &ndash;<br><em>einfach. korrekt. gesetzeskonform.</em></h1>
+  <p>Mit ezRechnung erstellen Sie XRechnungen und ZUGFeRD-Dokumente in Minuten. Perfekt f&uuml;r Einzelunternehmer und Freelancer.</p>
+  <div class="hero-btns">
+    <a href="https://www.ebay.de/itm/327131500089" target="_blank" class="btn-primary">Jetzt kaufen &rarr;</a>
+    <a href="https://www.youtube.com/watch?v=m259v2C4a0o" target="_blank" class="btn-secondary">&#9654; Demo ansehen</a>
+  </div>
+</div>
+
+<div class="trust">
+  <div class="trust-item">&#10003; XRechnung-konform</div>
+  <div class="trust-item">&#10003; ZUGFeRD 2.0</div>
+  <div class="trust-item">&#10003; Made in Germany</div>
+  <div class="trust-item">&#10003; DSGVO-konform</div>
+  <div class="trust-item">&#10003; Einmalzahlung &ndash; kein Abo</div>
+</div>
+
+<section id="features">
+  <div class="section-label">Features</div>
+  <h2>Alles was Sie brauchen</h2>
+  <p>ezRechnung deckt alle gesetzlichen Anforderungen ab und ist dabei so einfach wie ein Texteditor.</p>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">&#129534;</div><h3>XRechnung erstellen</h3><p>Normkonforme XRechnungen f&uuml;r Beh&ouml;rden und &ouml;ffentliche Auftraggeber &ndash; ohne Vorkenntnisse.</p></div>
+    <div class="feature-card"><div class="feature-icon">&#128196;</div><h3>ZUGFeRD 2.0 / Factur-X</h3><p>PDF mit eingebetteten XML-Daten. Der neue Standard f&uuml;r elektronische Rechnungen im B2B-Bereich.</p></div>
+    <div class="feature-card"><div class="feature-icon">&#9889;</div><h3>Schnell &amp; offline</h3><p>Keine Cloud, keine Anmeldung. Das Programm l&auml;uft direkt auf Ihrem PC &ndash; schnell und datensicher.</p></div>
+    <div class="feature-card"><div class="feature-icon">&#128228;</div><h3>PDF-Export</h3><p>Professionelle PDF-Rechnungen auf Knopfdruck, mit Ihrem Logo und Firmendesign.</p></div>
+    <div class="feature-card"><div class="feature-icon">&#128203;</div><h3>Vorlagen &amp; Stammdaten</h3><p>Kundendaten und Leistungstexte einmal hinterlegen und immer wieder verwenden.</p></div>
+    <div class="feature-card"><div class="feature-icon">&#128274;</div><h3>Datenschutz</h3><p>Alle Daten verbleiben lokal auf Ihrem Ger&auml;t. Keine Daten&uuml;bertragung an Dritte.</p></div>
+  </div>
+</section>
+
+<section id="produkt" style="background:#0d0d0d;max-width:100%;padding:4.5rem 2.5rem;">
+<div style="max-width:900px;margin:0 auto;">
+  <div class="section-label" style="color:rgba(245,196,0,0.7);">Das Produkt</div>
+  <h2 style="color:#fff;">ezRechnung im &Uuml;berblick</h2>
+  <div class="product-showcase">
+    <div class="screen-mockup">
+      <div class="screen-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <div class="screen-content">
+        <div style="color:rgba(255,255,255,0.3);font-size:0.7rem;margin-bottom:0.8rem;font-family:monospace;">RECHNUNG_2025-0042.xml</div>
+        <div class="screen-row"><span class="screen-label">Empf&auml;nger</span><span class="screen-val">Muster GmbH</span></div>
+        <div class="screen-row"><span class="screen-label">Datum</span><span class="screen-val">03.05.2025</span></div>
+        <div class="screen-row"><span class="screen-label">Position 1</span><span class="screen-val">450,00 &euro;</span></div>
+        <div class="screen-row"><span class="screen-label">Position 2</span><span class="screen-val">180,00 &euro;</span></div>
+        <div class="screen-row"><span class="screen-label">USt 19%</span><span class="screen-val">118,20 &euro;</span></div>
+        <div class="screen-total"><span class="label">Gesamt</span><span class="amount">748,20 &euro;</span></div>
+        <div style="margin-top:0.8rem;display:flex;gap:6px;">
+          <div style="flex:1;background:var(--gold);border-radius:5px;padding:0.4rem;text-align:center;color:#000;font-size:0.72rem;font-weight:700;">XRechnung</div>
+          <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:5px;padding:0.4rem;text-align:center;color:rgba(255,255,255,0.5);font-size:0.72rem;">ZUGFeRD</div>
+          <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:5px;padding:0.4rem;text-align:center;color:rgba(255,255,255,0.5);font-size:0.72rem;">PDF</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-info">
+      <h3>ezRechnung</h3>
+      <p>Das Programm f&uuml;r Windows, das Einzelunternehmer, Freelancer und kleine Betriebe bei der Erstellung rechtssicherer elektronischer Rechnungen unterst&uuml;tzt.</p>
+      <ul class="check-list">
+        <li>XRechnung f&uuml;r Beh&ouml;rden (PEPPOL/OZG)</li>
+        <li>ZUGFeRD 2.0 f&uuml;r B2B-Kunden</li>
+        <li>L&auml;uft ohne Internet &amp; ohne Abo</li>
+        <li>Einmal kaufen, dauerhaft nutzen</li>
+        <li>Kostenlose Updates im ersten Jahr</li>
+        <li>Kostenloser E-Mail-Support</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="preise">
+  <div class="section-label">Preise</div>
+  <h2>Transparent &amp; fair</h2>
+  <p>Kein Abo, kein Kleingedrucktes. Einmal kaufen und dauerhaft nutzen.</p>
+  <div class="pricing-card">
+    <div class="pricing-badge">Einzellizenz</div>
+    <div class="price"><sub>&euro;</sub> 99</div>
+    <p class="price-period">einmalig, zzgl. MwSt.</p>
+    <ul class="pricing-features">
+      <li>XRechnung &amp; ZUGFeRD 2.0</li>
+      <li>PDF-Rechnungsexport</li>
+      <li>Unbegrenzte Rechnungen</li>
+      <li>Stammdatenverwaltung</li>
+      <li>1 Jahr kostenlose Updates</li>
+      <li>E-Mail-Support</li>
+      <li>Windows 10 / 11</li>
+    </ul>
+    <a href="https://www.ebay.de/itm/327131500089" target="_blank" class="btn-full">Jetzt auf eBay kaufen &rarr;</a>
+  </div>
+</section>
+
+<section id="ueber" style="background:var(--surface);max-width:100%;padding:4.5rem 2.5rem;">
+<div style="max-width:900px;margin:0 auto;">
+  <div class="section-label">&#220;ber mich</div>
+  <h2>Yavuz IT</h2>
+  <div class="about-card">
+    <div class="avatar">Y</div>
+    <div class="about-text">
+      <h3>Einzelunternehmer &amp; Entwickler</h3>
+      <p class="about-role">Yavuz IT &ndash; Softwareentwicklung aus Deutschland</p>
+      <p>Ich entwickle praxisnahe Software f&uuml;r den deutschen Mittelstand und Selbst&auml;ndige. Mit ezRechnung m&ouml;chte ich die Umstellung auf die gesetzlich vorgeschriebene elektronische Rechnung so einfach wie m&ouml;glich machen &ndash; ohne Abonnements, ohne unn&ouml;tige Komplexit&auml;t.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="kontakt">
+  <div class="section-label">Kontakt</div>
+  <h2>Fragen? Ich helfe gern.</h2>
+  <p>Sie erreichen mich per E-Mail &ndash; ich antworte in der Regel innerhalb von 24 Stunden.</p>
+  <div class="contact-grid">
+    <div class="contact-item"><div class="contact-icon">&#9993;</div><div><strong>E-Mail</strong><span>info@yavuz-it.de</span></div></div>
+    <div class="contact-item"><div class="contact-icon">&#127760;</div><div><strong>Website</strong><span>www.yavuz-it.de</span></div></div>
+    <div class="contact-item"><div class="contact-icon">&#128205;</div><div><strong>Standort</strong><span>Deutschland</span></div></div>
+    <div class="contact-item"><div class="contact-icon">&#128336;</div><div><strong>Support</strong><span>Mo&ndash;Fr, 9&ndash;17 Uhr</span></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-divider"></div>
+  <div class="footer-links">
+    <a href="#">Impressum</a>
+    <a href="#">Datenschutz</a>
+    <a href="#">AGB</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+  <p><strong>Yavuz IT</strong> &ndash; Inh. [Ihr Name] &middot; [Stra&szlig;e, PLZ Ort] &middot; USt-IdNr.: DE[XXXXXXXXX]</p>
+  <p style="margin-top:4px;">&copy; 2025 Yavuz IT. Alle Rechte vorbehalten.</p>
+</footer>
+
+</body>
+</html>
